@@ -11,17 +11,21 @@ module.exports = function (app, express) {
   app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
+
   app.use(express.static(__dirname + '/../../client'));
 
+  // app.use('/', function(){
+  //   console.log("INDEX")
+  // });
 
   app.use('/api/users', userRouter); // use user router for all user request
 
   // authentication middleware used to decode token and made available on the request
   //app.use('/api/links', helpers.decode);
   app.use('/api/links', linkRouter); // user link router for link request
+
   app.use('/:code', function(req, res){
     res.redirect('/api/links/'+req.param('code'));
-    console.log('insideeeeee');
   });
   app.use(helpers.errorLogger);
   app.use(helpers.errorHandler);
